@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter value to convert"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/textViewOutput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Converted value will appear here"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:id="@+id/textViewExchangeRate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Exchange rate info will appear here"
+        android:paddingTop="16dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp">
+
+        <RadioButton
+            android:id="@+id/radioUSDToJPY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="USD to JPY" />
+
+        <RadioButton
+            android:id="@+id/radioBTCToEUR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BTC to EUR" />
+
+        <RadioButton
+            android:id="@+id/radioEURToVND"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EUR to VND" />
+
+        <RadioButton
+            android:id="@+id/radioUSDToVND"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="USD to VND" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonConvert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Convert"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

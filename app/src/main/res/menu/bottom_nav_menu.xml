@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home" />
+    <item
+        android:id="@+id/nav_exchange"
+        android:title="Exchange"
+        android:icon="@drawable/ic_exchange" />
+
+    <item
+        android:id="@+id/nav_charts"
+        android:title="StockCharts"
+        android:icon="@drawable/ic_charts" />
+
+    <item
+        android:id="@+id/nav_oil_chart"
+        android:title="OilChart"
+        android:icon="@drawable/ic_oilcharts" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" />
+
+    <!-- Thêm các item menu khác nếu cần -->
+</menu>
