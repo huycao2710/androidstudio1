@@ -9,14 +9,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileFragment extends Fragment {
     public TextView textViewUsernameValue, textViewEmailValue, textViewPhoneNumberValue;
     private Button logoutButton;
     private Button changePasswordButton;
-
+    private String userEmail;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -41,6 +49,8 @@ public class ProfileFragment extends Fragment {
             textViewUsernameValue.setText(fullName);
             textViewPhoneNumberValue.setText(phoneNumber);
             textViewEmailValue.setText(email);
+
+            userEmail = email;
         }
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +90,62 @@ public class ProfileFragment extends Fragment {
                 String newPassword = newPasswordEditText.getText().toString();
                 String confirmNewPassword = confirmNewPasswordEditText.getText().toString();
 
-                // Validate input and update password
-                //...
+                if (validatePasswords(currentPassword, newPassword, confirmNewPassword)) {
+                    updatePassword(currentPassword, newPassword, dialog);  // Pass dialog as parameter
+                }
             }
         });
 
         dialog.show();
+    }
+
+    private boolean validatePasswords(String currentPassword, String newPassword, String confirmNewPassword) {
+        if (currentPassword.isEmpty()) {
+            showToast("Vui lòng nhập mật khẩu hiện tại");
+            return false;
+        }
+        if (newPassword.isEmpty()) {
+            showToast("Vui lòng nhập mật khẩu mới");
+            return false;
+        }
+        if (newPassword.length() < 6) {
+            showToast("Mật khẩu mới phải có ít nhất 6 ký tự");
+            return false;
+        }
+        if (!newPassword.equals(confirmNewPassword)) {
+            showToast("Mật khẩu xác nhận không khớp");
+            return false;
+        }
+        return true;
+    }
+
+    private void updatePassword(String currentPassword, String newPassword, Dialog dialog) { // Add dialog parameter
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        reference.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        String passwordFromDB = userSnapshot.child("password").getValue(String.class);
+                        if (passwordFromDB != null && passwordFromDB.equals(currentPassword)) {
+                            userSnapshot.getRef().child("password").setValue(newPassword);
+                            showToast("Đổi mật khẩu thành công");
+                            dialog.dismiss();  // Close dialog on successful password change
+                        } else {
+                            showToast("Mật khẩu hiện tại không chính xác");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Đã xảy ra lỗi, vui lòng thử lại sau");
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }
